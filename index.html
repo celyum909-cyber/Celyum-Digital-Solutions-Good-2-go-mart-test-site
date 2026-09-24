@@ -6,8 +6,8 @@
 <title>Good 2 Go Mart</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0b0b0d">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Good 2 Go">
@@ -1086,6 +1086,7 @@
       <span>*Closing time is a placeholder — confirm your real hours and we'll update this.</span>
     </div>
     <div class="foot-bottom">
+      <a href="#" class="admin-link" onclick="window.g2gShowInstall && window.g2gShowInstall(); return false;">Add Good 2 Go to your phone</a>
       <a href="#admin" class="admin-link">Store Owner Login</a>
     </div>
   </div>
@@ -1588,7 +1589,7 @@
 
 <!-- ============ ADD TO PHONE BANNER ============ -->
 <div class="a2hs" id="a2hs" role="dialog" aria-label="Add Good 2 Go to your phone" hidden>
-  <img src="icons/icon-192.png" alt="">
+  <img src="icon-192.png" alt="">
   <div class="a2hs-body">
     <div class="a2hs-title">Add Good 2 Go to your phone</div>
     <div class="a2hs-steps" id="a2hs-steps"></div>
@@ -1603,7 +1604,7 @@
     window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
   }
 
-  var KEY = 'g2g-a2hs-dismissed';
+  var KEY = 'g2g-a2hs-dismissed-v2';
   var banner = document.getElementById('a2hs');
   var steps = document.getElementById('a2hs-steps');
   var installBtn = document.getElementById('a2hs-install');
@@ -1616,7 +1617,7 @@
   var installed = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 
   function dismissedRecently(){
-    try{ var t = +localStorage.getItem(KEY) || 0; return Date.now() - t < 14 * 864e5; }catch(e){ return false; }
+    try{ var t = +localStorage.getItem(KEY) || 0; return Date.now() - t < 3 * 864e5; }catch(e){ return false; }
   }
   function remember(){ try{ localStorage.setItem(KEY, String(Date.now())); }catch(e){} }
   function hide(){ banner.classList.remove('show'); setTimeout(function(){ banner.hidden = true; }, 400); }
@@ -1643,12 +1644,16 @@
   installBtn.addEventListener('click', function(){
     if(!deferred) return;
     deferred.prompt();
-    deferred.userChoice.finally(function(){ deferred = null; remember(); hide(); });
+    deferred.userChoice.then(function(c){ deferred = null; if(c && c.outcome === 'accepted'){ hide(); } });
   });
   window.addEventListener('appinstalled', function(){ remember(); hide(); });
   document.getElementById('a2hs-close').addEventListener('click', function(){ remember(); hide(); });
   window.addEventListener('hashchange', function(){ if(location.hash === '#admin') hide(); });
 
+  window.g2gShowInstall = function(){
+    if(installed){ steps.textContent = "You're already using the Good 2 Go app."; installBtn.hidden = true; }
+    show();
+  };
   if(isPhone && !installed && !dismissedRecently()){
     setTimeout(show, 2500);
   }
