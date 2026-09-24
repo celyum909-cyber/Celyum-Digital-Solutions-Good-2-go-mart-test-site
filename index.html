@@ -86,14 +86,22 @@
   }
   .hero-media{
     position:relative;
-    display:flex;flex-direction:column;justify-content:flex-end;
+    display:flex;flex-direction:column;
   }
-  .hero-slideshow{ position:absolute;inset:0; }
-  .hero-slide{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
-    object-position:center top;
+  /* Slides sit in a full-width 3:1 band so the whole banner is visible on
+     every screen size (phones included) instead of being cropped to the middle. */
+  .hero-slideshow{
+    position:relative;
+    width:100%;
+    aspect-ratio:3/1;
+    overflow:hidden;
     background:#000;
-    filter:saturate(1.15) brightness(0.85);
+  }
+  .hero-slide{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    object-position:center center;
+    background:#000;
+    filter:saturate(1.1) brightness(0.92);
     opacity:0;
     animation:heroFade 6s infinite;
   }
@@ -108,9 +116,10 @@
     100%{ opacity:0; }
   }
   .hero-scrim{
-    position:absolute;inset:0;
-    background:
-      linear-gradient(180deg, rgba(5,5,7,0.15) 0%, rgba(5,5,7,0.1) 40%, rgba(5,5,7,0.05) 70%, var(--bg) 100%);
+    position:absolute;top:0;left:0;right:0;
+    aspect-ratio:3/1;
+    pointer-events:none;
+    background:linear-gradient(180deg, rgba(5,5,7,0) 0%, rgba(5,5,7,0) 70%, rgba(5,5,7,0.35) 100%);
   }
   .hero-text{
     background:var(--bg);
@@ -155,7 +164,10 @@
   .hero-store-wrap{
     position:relative;z-index:2;
     width:100%;flex:none;
-    margin-top:0;
+    /* the storefront image is transparent across its top ~37%; pull it up
+       (percent margins scale with width) so the sign tucks just under the slides */
+    margin-top:-32%;
+    pointer-events:none;
   }
   .hero-store{
     width:100%;height:auto;
@@ -322,6 +334,22 @@
     .admin-row{grid-template-columns:48px 1fr;}
     .admin-row input{grid-column:1 / -1;}
   }
+
+
+  /* ---------- DEAL EDITOR ---------- */
+  .deal-editor-grid{display:grid;grid-template-columns:280px 1fr;gap:28px;align-items:start;}
+  .deal-editor-preview{aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:var(--surface-2);border:1px solid var(--line);}
+  .deal-editor-preview img{width:100%;height:100%;object-fit:cover;display:block;}
+  .de-file-btn{display:block;margin-top:12px;text-align:center;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:11px;font-weight:800;font-size:13px;cursor:pointer;color:var(--ink);}
+  .de-file-btn:hover{border-color:var(--red);}
+  .de-hint{font-size:11.5px;color:var(--ink-faint);margin-top:8px;line-height:1.4;}
+  .deal-editor-fields{display:flex;flex-direction:column;gap:14px;}
+  .deal-editor-fields label{display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);}
+  .deal-editor-fields .opt{text-transform:none;letter-spacing:0;font-weight:400;}
+  .deal-editor-fields input,.deal-editor-fields textarea{width:100%;padding:11px 12px;border-radius:9px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-size:15px;font-family:inherit;text-transform:none;letter-spacing:0;font-weight:500;resize:vertical;}
+  .deal-editor-fields input:focus,.deal-editor-fields textarea:focus{outline:2px solid var(--red);outline-offset:0;border-color:transparent;}
+  .de-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:680px){ .deal-editor-grid{grid-template-columns:1fr;} .deal-editor-photo{max-width:320px;} .de-row{grid-template-columns:1fr;} }
 
   /* ---------- DEAL OF THE DAY ---------- */
   .deal{
@@ -687,16 +715,17 @@
     </div>
     <div class="deal-card">
       <div>
-        <span class="deal-tag">🔥 Today's Grab</span>
-        <h3 class="deal-title">Dirty Red Bull Combo</h3>
-        <p class="deal-desc">Utz Butter Popcorn + a Dirty Red Bull, made fresh at the register.</p>
+        <span class="deal-tag" id="deal-tag">🔥 Today's Grab</span>
+        <h3 class="deal-title" id="deal-title">Dirty Red Bull Combo</h3>
+        <p class="deal-desc" id="deal-desc">Utz Butter Popcorn + a Dirty Red Bull, made fresh at the register.</p>
         <div class="deal-price-row">
-          <span class="deal-price">$6.99</span>
+          <span class="deal-price" id="deal-price">$6.99</span>
+          <span class="deal-was" id="deal-was" hidden></span>
         </div>
-        <div class="deal-note">Today's featured combo at the register.</div>
+        <div class="deal-note" id="deal-note">Today's featured combo at the register.</div>
       </div>
       <div class="deal-visual">
-        <img src="assets/deals/dirty-redbull-combo-v2.jpg" alt="Dirty Red Bull Combo — Utz Butter Popcorn and a Dirty Red Bull, $6.99" loading="lazy" decoding="async">
+        <img id="deal-img" src="assets/deals/dirty-redbull-combo-v2.jpg" alt="Dirty Red Bull Combo — Utz Butter Popcorn and a Dirty Red Bull, $6.99" loading="lazy" decoding="async">
       </div>
     </div>
   </div>
@@ -1059,20 +1088,54 @@
 <div id="admin-page" class="admin-page" hidden>
   <div id="admin-gate" class="admin-gate">
     <h2>Owner Login</h2>
-    <p>Enter the store password to update product photos and prices on the live site.</p>
-    <input type="password" id="admin-password-input" placeholder="Password" autocomplete="off">
+    <p id="admin-gate-msg">Enter the store password to update the Deal of the Day.</p>
+    <input type="password" id="admin-password-input" placeholder="Password" autocomplete="current-password">
     <button id="admin-login-btn" type="button">Unlock</button>
     <div class="admin-error" id="admin-error">Incorrect password.</div>
   </div>
   <div id="admin-panel" class="admin-wrap" hidden>
     <div class="admin-top">
-      <h1>Manage Products</h1>
-      <a class="admin-back" href="#offer">← Back to site</a>
+      <h1>Deal of the Day</h1>
+      <div style="display:flex;gap:16px;align-items:center;">
+        <a class="admin-back" href="#deal">← Back to site</a>
+        <a class="admin-back" href="#" id="admin-logout">Log out</a>
+      </div>
     </div>
-    <div id="admin-categories"></div>
-    <div class="admin-save-wrap">
-      <button id="admin-save-btn" type="button">Save &amp; Publish Changes</button>
-      <div class="admin-status" id="admin-status"></div>
+
+    <form id="deal-form" class="deal-editor" autocomplete="off">
+      <div class="deal-editor-grid">
+        <div class="deal-editor-photo">
+          <div class="deal-editor-preview"><img id="de-preview" src="" alt="Deal photo preview"></div>
+          <label class="de-file-btn">Choose new photo
+            <input type="file" id="de-image" accept="image/*" hidden>
+          </label>
+          <div class="de-hint">Photos are shrunk automatically before upload. Square photos look best.</div>
+        </div>
+        <div class="deal-editor-fields">
+          <label>Badge<input type="text" id="de-tag" maxlength="40" placeholder="🔥 Today's Grab"></label>
+          <label>Title<input type="text" id="de-title" maxlength="80" placeholder="Dirty Red Bull Combo"></label>
+          <label>Description<textarea id="de-desc" maxlength="300" rows="3" placeholder="What's in the deal"></textarea></label>
+          <div class="de-row">
+            <label>Price<input type="text" id="de-price" maxlength="20" placeholder="$6.99"></label>
+            <label>Regular price <span class="opt">(optional, shown crossed out)</span><input type="text" id="de-was" maxlength="20" placeholder="$8.49"></label>
+          </div>
+          <label>Small print<input type="text" id="de-note" maxlength="160" placeholder="Today's featured combo at the register."></label>
+        </div>
+      </div>
+      <div class="admin-save-wrap">
+        <button id="de-save" type="submit">Save &amp; Publish Deal</button>
+        <div class="admin-status" id="de-status"></div>
+      </div>
+    </form>
+
+    <!-- Product price editor: only works when the site is opened as the Claude-hosted version -->
+    <div id="product-admin" hidden>
+      <h2 style="font-size:18px;color:#fff;margin:48px 0 20px;">Products (Claude-hosted version only)</h2>
+      <div id="admin-categories"></div>
+      <div class="admin-save-wrap">
+        <button id="admin-save-btn" type="button">Save &amp; Publish Product Changes</button>
+        <div class="admin-status" id="admin-status"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1236,18 +1299,76 @@
   mlb.addEventListener('click', function(e){ if(e.target === mlb){ closeMenuLightbox(); } });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeMenuLightbox(); } });
 
+  // ===================== DEAL OF THE DAY (live from Cloudflare) =====================
+  // Paste your Worker address between the quotes, e.g.
+  //   var DEAL_API = 'https://g2g-deal.yourname.workers.dev';
+  // Leave it empty and the site simply shows the deal written in this file.
+  var DEAL_API = 'https://g2g-deal.celyum909.workers.dev';
+
+  var dealEls = {
+    tag: document.getElementById('deal-tag'),
+    title: document.getElementById('deal-title'),
+    desc: document.getElementById('deal-desc'),
+    price: document.getElementById('deal-price'),
+    was: document.getElementById('deal-was'),
+    note: document.getElementById('deal-note'),
+    img: document.getElementById('deal-img')
+  };
+  var currentDeal = {
+    tag: dealEls.tag.textContent, title: dealEls.title.textContent, desc: dealEls.desc.textContent,
+    price: dealEls.price.textContent, was: '', note: dealEls.note.textContent,
+    imgSrc: dealEls.img.getAttribute('src')
+  };
+
+  function apiBase(){ return DEAL_API.replace(/\/+$/, ''); }
+  function dealImageUrl(d){ return apiBase() + '/deal/image?v=' + (d.updated || 0); }
+
+  function showDeal(d){
+    if(d.tag) dealEls.tag.textContent = d.tag;
+    if(d.title) dealEls.title.textContent = d.title;
+    if(typeof d.desc === 'string') dealEls.desc.textContent = d.desc;
+    if(d.price) dealEls.price.textContent = d.price;
+    dealEls.was.textContent = d.was || '';
+    dealEls.was.hidden = !d.was;
+    if(typeof d.note === 'string') dealEls.note.textContent = d.note;
+    if(d.hasImage){ dealEls.img.src = dealImageUrl(d); }
+    dealEls.img.alt = (d.title || '') + (d.price ? ', ' + d.price : '');
+    Object.assign(currentDeal, d, { imgSrc: d.hasImage ? dealImageUrl(d) : currentDeal.imgSrc });
+  }
+
+  function loadDeal(){
+    if(!DEAL_API) return Promise.resolve();
+    return fetch(apiBase() + '/deal', {cache: 'no-store'})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){ if(d && !d.empty) showDeal(d); })
+      .catch(function(){ /* keep the built-in deal if the service can't be reached */ });
+  }
+  loadDeal();
+
   // ===================== OWNER ADMIN PAGE =====================
-  // Draft-level protection only: this password lives in the page's own
-  // source and is visible to anyone who views it — it just keeps casual
-  // visitors out of the editor. The real backstop is that only people
-  // with edit access to this artifact can actually publish a change;
-  // everyone else's Save button will fail even if they get past this screen.
-  var ADMIN_PASSWORD = 'GoodTogo2026';
+  // The password is checked by the Cloudflare Worker, not in this page, so it
+  // never appears in the site's code.
+  var PW_KEY = 'g2g-owner-pw';
+  function getPw(){ try{ return sessionStorage.getItem(PW_KEY) || ''; }catch(e){ return ''; } }
+  function setPw(v){ try{ v ? sessionStorage.setItem(PW_KEY, v) : sessionStorage.removeItem(PW_KEY); }catch(e){} }
+  var canPublishArtifact = !!(window.claude && window.claude.use);
 
   function escHtml(s){
     return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
     });
+  }
+
+  function fillDealForm(){
+    document.getElementById('de-tag').value = currentDeal.tag || '';
+    document.getElementById('de-title').value = currentDeal.title || '';
+    document.getElementById('de-desc').value = currentDeal.desc || '';
+    document.getElementById('de-price').value = currentDeal.price || '';
+    document.getElementById('de-was').value = currentDeal.was || '';
+    document.getElementById('de-note').value = currentDeal.note || '';
+    document.getElementById('de-preview').src = currentDeal.imgSrc || '';
+    pendingImage = null;
+    document.getElementById('de-status').textContent = '';
   }
 
   function renderAdminForm(){
@@ -1273,19 +1394,28 @@
   function unlockAdmin(){
     document.getElementById('admin-gate').hidden = true;
     document.getElementById('admin-panel').hidden = false;
-    renderAdminForm();
+    loadDeal().then(fillDealForm);
+    if(canPublishArtifact){
+      document.getElementById('product-admin').hidden = false;
+      renderAdminForm();
+    }
+  }
+  function lockAdmin(){
+    setPw('');
+    document.getElementById('admin-gate').hidden = false;
+    document.getElementById('admin-panel').hidden = true;
   }
 
   function showAdmin(){
     document.getElementById('site').style.display = 'none';
     document.getElementById('admin-page').hidden = false;
-    var already = false;
-    try{ already = sessionStorage.getItem('g2g-admin-ok') === '1'; }catch(e){}
-    if(already){ unlockAdmin(); }
-    else {
-      document.getElementById('admin-gate').hidden = false;
-      document.getElementById('admin-panel').hidden = true;
+    if(!DEAL_API){
+      document.getElementById('admin-gate-msg').textContent = "The owner editor isn't connected yet. Add the Cloudflare Worker address to DEAL_API in index.html.";
+      document.getElementById('admin-login-btn').disabled = true;
+      lockAdmin();
+      return;
     }
+    if(getPw()){ unlockAdmin(); } else { lockAdmin(); }
   }
   function showSite(){
     document.getElementById('admin-page').hidden = true;
@@ -1298,19 +1428,78 @@
   routeFromHash();
 
   var pwInput = document.getElementById('admin-password-input');
-  document.getElementById('admin-login-btn').addEventListener('click', function(){
-    if(pwInput.value === ADMIN_PASSWORD){
-      try{ sessionStorage.setItem('g2g-admin-ok', '1'); }catch(e){}
-      document.getElementById('admin-error').style.display = 'none';
-      unlockAdmin();
-    } else {
-      document.getElementById('admin-error').style.display = 'block';
-    }
+  var loginBtn = document.getElementById('admin-login-btn');
+  var errEl = document.getElementById('admin-error');
+  loginBtn.addEventListener('click', function(){
+    var pw = pwInput.value;
+    if(!pw || !DEAL_API) return;
+    loginBtn.disabled = true; loginBtn.textContent = 'Checking…'; errEl.style.display = 'none';
+    fetch(apiBase() + '/login', {method: 'POST', headers: {'X-Admin-Password': pw}})
+      .then(function(r){
+        if(r.ok){ setPw(pw); pwInput.value = ''; unlockAdmin(); }
+        else { errEl.textContent = r.status === 401 ? 'Incorrect password.' : 'Login service error (' + r.status + ').'; errEl.style.display = 'block'; }
+      })
+      .catch(function(){ errEl.textContent = "Couldn't reach the login service. Check your connection."; errEl.style.display = 'block'; })
+      .finally(function(){ loginBtn.disabled = false; loginBtn.textContent = 'Unlock'; });
   });
-  pwInput.addEventListener('keydown', function(e){
-    if(e.key === 'Enter'){ document.getElementById('admin-login-btn').click(); }
+  pwInput.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ loginBtn.click(); } });
+  document.getElementById('admin-logout').addEventListener('click', function(e){ e.preventDefault(); lockAdmin(); });
+
+  // ---- deal photo: shrink on the phone/computer before upload (keeps it fast and inside free limits)
+  var pendingImage = null;
+  function shrinkImage(file, maxSide){
+    return new Promise(function(resolve, reject){
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function(){
+        var scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+        var c = document.createElement('canvas');
+        c.width = Math.round(img.naturalWidth * scale);
+        c.height = Math.round(img.naturalHeight * scale);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        c.toBlob(function(b){ b ? resolve(b) : reject(new Error('shrink failed')); }, 'image/jpeg', 0.85);
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error("That file isn't a photo this browser can read.")); };
+      img.src = url;
+    });
+  }
+  document.getElementById('de-image').addEventListener('change', function(e){
+    var f = e.target.files && e.target.files[0];
+    var status = document.getElementById('de-status');
+    if(!f) return;
+    status.textContent = 'Preparing photo…';
+    shrinkImage(f, 1400).then(function(blob){
+      pendingImage = blob;
+      document.getElementById('de-preview').src = URL.createObjectURL(blob);
+      status.textContent = 'New photo ready — press Save to publish it.';
+    }).catch(function(err){ status.textContent = err.message; });
   });
 
+  document.getElementById('deal-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var btn = document.getElementById('de-save');
+    var status = document.getElementById('de-status');
+    var fd = new FormData();
+    ['tag','title','desc','price','was','note'].forEach(function(k){
+      fd.append(k, document.getElementById('de-' + k).value);
+    });
+    if(pendingImage) fd.append('image', pendingImage, 'deal.jpg');
+    btn.disabled = true; status.textContent = 'Publishing…';
+    fetch(apiBase() + '/deal', {method: 'POST', headers: {'X-Admin-Password': getPw()}, body: fd})
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(body){ return {r: r, body: body}; }); })
+      .then(function(res){
+        if(res.r.status === 401){ status.textContent = 'Your login expired — please log in again.'; lockAdmin(); return; }
+        if(!res.r.ok){ status.textContent = res.body.error || ('Save failed (' + res.r.status + ').'); return; }
+        showDeal(res.body.deal);
+        pendingImage = null;
+        status.textContent = 'Published — the new deal is live on the site now.';
+      })
+      .catch(function(){ status.textContent = "Couldn't reach the deal service. Check your connection and try again."; })
+      .finally(function(){ btn.disabled = false; });
+  });
+
+  // ---- product editor (Claude-hosted version only)
   document.getElementById('admin-save-btn').addEventListener('click', function(){
     var statusEl = document.getElementById('admin-status');
     var btn = document.getElementById('admin-save-btn');
@@ -1369,3 +1558,7 @@
 
 </body>
 </html>
+
+
+
+
