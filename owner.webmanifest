@@ -1,0 +1,16 @@
+{
+  "id": "./owner.html",
+  "name": "Good 2 Go Owner",
+  "short_name": "G2G Owner",
+  "description": "Update the Good 2 Go Mart Deal of the Day.",
+  "start_url": "./owner.html",
+  "scope": "./owner.html",
+  "display": "standalone",
+  "background_color": "#0b0b0d",
+  "theme_color": "#0b0b0d",
+  "icons": [
+    { "src": "owner-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "owner-icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "owner-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
