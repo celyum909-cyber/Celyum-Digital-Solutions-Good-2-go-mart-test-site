@@ -1212,7 +1212,7 @@
       var thumb;
       if(it.img){
         thumb = '<div class="car-thumb-photo" data-lightbox="1" data-img="' + it.img + '" data-brand="' + (it.brand||'') + '" data-name="' + it.name + '" data-price="' + it.price + '" data-tag="' + (it.tag||'') + '">' +
-          '<span class="plus">' + (it.tag||'') + '</span>' +
+          '<span class="plus">' + (it.tag && !it.tag.includes('lb') ? it.tag : '') + '</span>' +
           '<img src="' + it.img + '" alt="' + it.name + ' — tap to expand" loading="lazy" decoding="async">' +
           '<span class="expand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>' +
         '</div>';
@@ -1228,7 +1228,7 @@
         '</div>';
       }
       html += '<div class="car-card">' + thumb +
-        '<div class="car-body"><div class="name">' + it.name + '</div><div class="price">' + it.price + '</div></div>' +
+        '<div class="car-body"><div class="name">' + it.name + '</div><div class="price">' + it.price + (it.tag && it.tag.includes('lb') ? '/lb' : '') + '</div></div>' +
       '</div>';
     });
     row.innerHTML = html;
@@ -1283,8 +1283,10 @@
     lbImg.alt = el.getAttribute('data-name');
     lbBrand.textContent = el.getAttribute('data-brand');
     lbName.textContent = el.getAttribute('data-name');
-    lbPrice.textContent = el.getAttribute('data-price');
-    lbTag.textContent = el.getAttribute('data-tag');
+    var price = el.getAttribute('data-price');
+    var tag = el.getAttribute('data-tag');
+    lbPrice.textContent = price + (tag && tag.includes('lb') ? '/lb' : '');
+    lbTag.textContent = tag && !tag.includes('lb') ? tag : '';
     lb.classList.add('open');
     lb.setAttribute('aria-hidden', 'false');
   }
