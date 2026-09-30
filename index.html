@@ -633,6 +633,20 @@
   @media (max-width:760px){ .foot-grid{grid-template-columns:1fr;} }
 
   .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+  /* ---------- GAMES ---------- */
+  .games{background:var(--bg);border-top:1px solid var(--line);}
+  .game-grid{display:grid;grid-template-columns:repeat(2,minmax(0,280px));gap:16px;}
+  .game-btn{display:block;text-decoration:none;color:var(--ink);background:var(--surface);
+    border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:.2s border-color,.2s transform;}
+  .game-btn:hover{border-color:var(--red);transform:translateY(-2px);}
+  .game-btn:focus-visible{outline:3px solid var(--cyan);outline-offset:3px;}
+  .game-btn img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;background:var(--surface-2);}
+  .game-name{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;
+    font-weight:800;font-size:16px;}
+  .game-play{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;
+    background:var(--red);border-radius:999px;padding:6px 12px;white-space:nowrap;}
+  @media (max-width:520px){ .game-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+    .game-name{flex-direction:column;align-items:flex-start;padding:12px;font-size:15px;} }
 </style>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600;700;800&display=swap">
@@ -649,6 +663,7 @@
       <a href="#offer">Offer</a>
       <a href="#deal">Deal of the Day</a>
       <a href="#drinks">Shop</a>
+      <a href="#games">Games</a>
       <a href="#visit">Visit</a>
       <a href="#reviews">Reviews</a>
     </div>
@@ -978,6 +993,29 @@
   </div>
 </section>
 
+<!-- ============ GAMES ============ -->
+<section class="games" id="games">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">Just for Fun</div>
+        <h2>Play a Game</h2>
+      </div>
+      <p>Waiting on a sandwich? Pass the time with a quick game.</p>
+    </div>
+    <div class="game-grid">
+      <a class="game-btn" href="games/block-blast.html">
+        <img src="games/block-blast-thumb.webp" alt="Block Blast: colorful blocks on a puzzle grid" loading="lazy" decoding="async" width="480" height="480">
+        <span class="game-name">Block Blast <span class="game-play">Play</span></span>
+      </a>
+      <a class="game-btn" href="games/candy-jar-sort.html">
+        <img src="games/candy-jar-sort-thumb.webp" alt="Candy Jar Sort: wrapped candies in glass jars" loading="lazy" decoding="async" width="480" height="480">
+        <span class="game-name">Candy Jar Sort <span class="game-play">Play</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- ============ VISIT / MAP ============ -->
 <section class="visit" id="visit">
   <div class="wrap">
@@ -1077,6 +1115,7 @@
         <ul class="foot-list">
           <li><a href="#offer">What We Offer</a></li>
           <li><a href="#deal">Deal of the Day</a></li>
+          <li><a href="#games">Games</a></li>
           <li><a href="#visit">Directions &amp; Hours</a></li>
           <li><a href="#reviews">Reviews</a></li>
         </ul>
