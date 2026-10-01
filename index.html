@@ -280,6 +280,65 @@
   }
   .menu-lightbox-close svg{width:18px;height:18px;}
 
+
+  /* ---------- MENUS BUTTON + PANEL ---------- */
+  .nav-actions{display:flex;align-items:center;gap:8px;}
+  .nav-menus{
+    display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+    background:transparent;color:#fff;border:1.5px solid var(--cyan);
+    font-family:inherit;font-weight:800;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
+    padding:8.5px 14px;border-radius:999px;white-space:nowrap;
+  }
+  .nav-menus svg{width:15px;height:15px;color:var(--cyan);}
+  .nav-menus:hover{background:rgba(255,255,255,0.06);}
+  .cta-short{display:none;}
+  @media (max-width:420px){
+    .cta-long{display:none;} .cta-short{display:inline;}
+    .nav-cta,.nav-menus{padding-inline:12px;}
+    .nav-brand{font-size:14px;}
+  }
+  .menus-shortcut{padding-block:0 36px;}
+  .menus-shortcut-btn{
+    width:100%;display:flex;align-items:center;gap:14px;text-align:left;cursor:pointer;
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:16px 18px;color:var(--ink);font-family:inherit;transition:.2s border-color;
+  }
+  .menus-shortcut-btn:hover{border-color:var(--red);}
+  .ms-icon{flex:none;width:44px;height:44px;border-radius:12px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;}
+  .ms-icon svg{width:22px;height:22px;}
+  .ms-text{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0;}
+  .ms-text strong{font-family:'Archivo Black',sans-serif;font-weight:400;font-size:17px;}
+  .ms-text small{color:var(--ink-dim);font-size:13px;}
+  .ms-arrow svg{width:20px;height:20px;color:var(--cyan);}
+  .menus-panel{
+    position:fixed;inset:0;z-index:150;background:var(--bg,#0b0b0d);
+    display:flex;flex-direction:column;
+    opacity:0;pointer-events:none;transform:translateY(12px);transition:.22s opacity,.22s transform;
+  }
+  .menus-panel.open{opacity:1;pointer-events:auto;transform:none;}
+  .menus-panel-head{
+    flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:calc(14px + env(safe-area-inset-top,0px)) 20px 14px;
+    border-bottom:1px solid var(--line);background:rgba(11,11,13,0.96);
+  }
+  .menus-panel-head h2{margin:2px 0 0;font-size:24px;}
+  .menus-panel-close{
+    flex:none;display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+    background:var(--red);color:#fff;border:none;border-radius:999px;
+    font-family:inherit;font-weight:800;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
+    padding:10px 16px;
+  }
+  .menus-panel-close svg{width:16px;height:16px;}
+  .menus-panel-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:24px 0 calc(32px + env(safe-area-inset-bottom,0px));}
+  .menu-card-wide img{aspect-ratio:1672/941;object-position:center;}
+  .menus-panel-done{
+    display:block;width:100%;margin-top:32px;cursor:pointer;
+    background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:14px;
+    font-family:inherit;font-weight:800;font-size:14px;letter-spacing:0.04em;text-transform:uppercase;padding:16px;
+  }
+  .menus-panel-done:hover{border-color:var(--red);}
+  body.menus-open{overflow:hidden;}
+
   /* ---------- PROMO BANNER ---------- */
   .promo-banner{padding-block:0 40px;}
   .promo-banner .wrap{padding-inline:20px;}
@@ -667,7 +726,12 @@
       <a href="#visit">Visit</a>
       <a href="#reviews">Reviews</a>
     </div>
-    <a class="nav-cta" href="tel:+17162481261">Call the Store</a>
+    <div class="nav-actions">
+      <button type="button" class="nav-menus" data-open-menus aria-haspopup="dialog" aria-controls="menus-panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Menus
+      </button>
+      <a class="nav-cta" href="tel:+17162481261"><span class="cta-long">Call the Store</span><span class="cta-short">Call</span></a>
+    </div>
   </div>
 </nav>
 
@@ -772,13 +836,13 @@
         <h3 class="deal-title" id="deal-title">Dirty Red Bull Combo</h3>
         <p class="deal-desc" id="deal-desc">Utz Butter Popcorn + a Dirty Red Bull, made fresh at the register.</p>
         <div class="deal-price-row">
-          <span class="deal-price" id="deal-price">$6.99</span>
+          <span class="deal-price" id="deal-price">$5.99</span>
           <span class="deal-was" id="deal-was" hidden></span>
         </div>
         <div class="deal-note" id="deal-note">Today's featured combo at the register.</div>
       </div>
       <div class="deal-visual">
-        <img id="deal-img" src="assets/deals/dirty-redbull-combo-v2.jpg" alt="Dirty Red Bull Combo — Utz Butter Popcorn and a Dirty Red Bull, $6.99" loading="lazy" decoding="async">
+        <img id="deal-img" src="assets/deals/dirty-redbull-combo-v2.jpg" alt="Dirty Red Bull Combo — Utz Butter Popcorn and a Dirty Red Bull, $5.99" loading="lazy" decoding="async">
       </div>
     </div>
   </div>
@@ -801,10 +865,14 @@
   </div>
 </section>
 
-<!-- ============ PROMO: DIRTY RED BULL MENU ============ -->
-<section class="promo-banner">
+<!-- ============ MENUS SHORTCUT (full menus live in the Menus panel) ============ -->
+<section class="menus-shortcut">
   <div class="wrap">
-    <img src="assets/promo/dirty-redbull-menu.webp" alt="Good 2 Go Dirty Red Bull Menu — 16oz only $6: Berry Breeze, Red Rush, Sunset Splash, Blue Rush, Summer Shock, Sweet Shock, Piña Colada, Bull Shot. Extras: flavor shot or cold foam $1.00" loading="lazy" decoding="async">
+    <button type="button" class="menus-shortcut-btn" data-open-menus>
+      <span class="ms-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>
+      <span class="ms-text"><strong>See Our Menus</strong><small>Sandwiches, meat by the pound, Dirty Red Bull &amp; lottery</small></span>
+      <span class="ms-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+    </button>
   </div>
 </section>
 
@@ -822,62 +890,6 @@
       </div>
     </div>
     <div class="car-row" id="deli-row"></div>
-  </div>
-</section>
-
-<!-- ============ FULL SANDWICH MENU ============ -->
-<section class="carousel-block">
-  <div class="wrap">
-    <div class="sec-head">
-      <div>
-        <div class="eyebrow">Tap To Zoom In</div>
-        <h2>Full Sandwich Menu</h2>
-      </div>
-    </div>
-    <div class="menu-group">
-      <div class="menu-group-label"><span>Subs &amp; Cheese</span><div class="line"></div></div>
-      <div class="menu-grid">
-        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-cold-subs.webp" role="button" tabindex="0" aria-label="Open cold subs menu, full size">
-          <img src="assets/menu/menu-cold-subs.webp" alt="Cold subs menu" loading="lazy" decoding="async">
-        </div>
-        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-build-your-own.webp" role="button" tabindex="0" aria-label="Open build your own sandwich menu, full size">
-          <img src="assets/menu/menu-build-your-own.webp" alt="Build your own sandwich menu" loading="lazy" decoding="async">
-        </div>
-        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-cheese.webp" role="button" tabindex="0" aria-label="Open cheese menu, full size">
-          <img src="assets/menu/menu-cheese.webp" alt="Cheese menu" loading="lazy" decoding="async">
-        </div>
-      </div>
-    </div>
-
-    <div class="menu-group">
-      <div class="menu-group-label"><span>Specialty Sandwiches</span><div class="line"></div></div>
-      <div class="menu-grid">
-        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-turkey.webp" role="button" tabindex="0" aria-label="Open Turkey sandwich menu, full size">
-          <img src="assets/menu/menu-turkey.webp" alt="Specialty sandwiches menu: turkey" loading="lazy" decoding="async">
-        </div>
-        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-boarshead-beef-cheese-byo.webp" role="button" tabindex="0" aria-label="Open Boar's Head Beef, Cheese and Build Your Own menu, full size">
-          <img src="assets/menu/menu-boarshead-beef-cheese-byo.webp" alt="Boar's Head menu: beef, cheese and build your own" loading="lazy" decoding="async">
-        </div>
-        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-chicken.webp" role="button" tabindex="0" aria-label="Open Chicken sandwich menu, full size">
-          <img src="assets/menu/menu-chicken.webp" alt="Specialty sandwiches menu: chicken" loading="lazy" decoding="async">
-        </div>
-      </div>
-    </div>
-
-    <div class="menu-group">
-      <div class="menu-group-label"><span>Meat By The Pound &amp; Lottery</span><div class="line"></div></div>
-      <div class="menu-grid">
-        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-meat-camellia-v2.webp" role="button" tabindex="0" aria-label="Open Camellia meat by the pound menu, full size">
-          <img src="assets/menu/menu-meat-camellia-v2.webp" alt="Camellia meat by the pound menu" loading="lazy" decoding="async">
-        </div>
-        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-meat-boarshead-v2.webp" role="button" tabindex="0" aria-label="Open Boar's Head meat by the pound menu, full size">
-          <img src="assets/menu/menu-meat-boarshead-v2.webp" alt="Boar's Head meat by the pound menu" loading="lazy" decoding="async">
-        </div>
-        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-lottery.webp" role="button" tabindex="0" aria-label="Open New York Lottery menu, full size">
-          <img src="assets/menu/menu-lottery.webp" alt="Good 2 Go now has New York Lottery: Powerball, Mega Millions, Cash4Life, Take 5" loading="lazy" decoding="async">
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -916,7 +928,6 @@
         <button class="car-btn" data-scroll="utz-row" data-dir="1" aria-label="Scroll right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
       </div>
     </div>
-    <p style="color:var(--ink-faint);font-size:12px;margin:-14px 0 22px;max-width:620px;">Real Utz photos, priced at $4.99 as a placeholder — we couldn't pull an exact register price for your store, so send the real numbers whenever you have them.</p>
     <div class="car-row" id="utz-row"></div>
   </div>
 </section>
@@ -1155,6 +1166,77 @@
   </div>
 </div>
 
+<!-- ============ MENUS PANEL ============ -->
+<div class="menus-panel" id="menus-panel" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="menus-panel-title">
+  <div class="menus-panel-head">
+    <div>
+      <div class="eyebrow">Tap any menu to zoom in</div>
+      <h2 id="menus-panel-title">Our Menus</h2>
+    </div>
+    <button type="button" class="menus-panel-close" id="menus-panel-close" aria-label="Close menus">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      <span>Exit</span>
+    </button>
+  </div>
+  <div class="menus-panel-body" id="menus-panel-body">
+    <div class="wrap">
+    <div class="menu-group">
+      <div class="menu-group-label"><span>Dirty Red Bull</span><div class="line"></div></div>
+      <div class="menu-card menu-card-wide" data-menu-lightbox="1" data-img="assets/promo/dirty-redbull-menu.webp" role="button" tabindex="0" aria-label="Open Dirty Red Bull menu, full size">
+        <img src="assets/promo/dirty-redbull-menu.webp" alt="Good 2 Go Dirty Red Bull Menu — 16oz only $6: Berry Breeze, Red Rush, Sunset Splash, Blue Rush, Summer Shock, Sweet Shock, Piña Colada, Bull Shot. Extras: flavor shot or cold foam $1.00" loading="lazy" class="menus-promo-img" decoding="async">
+      </div>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-group-label"><span>Subs &amp; Cheese</span><div class="line"></div></div>
+      <div class="menu-grid">
+        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-cold-subs.webp" role="button" tabindex="0" aria-label="Open cold subs menu, full size">
+          <img src="assets/menu/menu-cold-subs.webp" alt="Cold subs menu" loading="lazy" decoding="async">
+        </div>
+        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-build-your-own.webp" role="button" tabindex="0" aria-label="Open build your own sandwich menu, full size">
+          <img src="assets/menu/menu-build-your-own.webp" alt="Build your own sandwich menu" loading="lazy" decoding="async">
+        </div>
+        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-cheese.webp" role="button" tabindex="0" aria-label="Open cheese menu, full size">
+          <img src="assets/menu/menu-cheese.webp" alt="Cheese menu" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-group-label"><span>Specialty Sandwiches</span><div class="line"></div></div>
+      <div class="menu-grid">
+        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-turkey.webp" role="button" tabindex="0" aria-label="Open Turkey sandwich menu, full size">
+          <img src="assets/menu/menu-turkey.webp" alt="Specialty sandwiches menu: turkey" loading="lazy" decoding="async">
+        </div>
+        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-boarshead-beef-cheese-byo.webp" role="button" tabindex="0" aria-label="Open Boar's Head Beef, Cheese and Build Your Own menu, full size">
+          <img src="assets/menu/menu-boarshead-beef-cheese-byo.webp" alt="Boar's Head menu: beef, cheese and build your own" loading="lazy" decoding="async">
+        </div>
+        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-chicken.webp" role="button" tabindex="0" aria-label="Open Chicken sandwich menu, full size">
+          <img src="assets/menu/menu-chicken.webp" alt="Specialty sandwiches menu: chicken" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-group-label"><span>Meat By The Pound &amp; Lottery</span><div class="line"></div></div>
+      <div class="menu-grid">
+        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-meat-camellia-v2.webp" role="button" tabindex="0" aria-label="Open Camellia meat by the pound menu, full size">
+          <img src="assets/menu/menu-meat-camellia-v2.webp" alt="Camellia meat by the pound menu" loading="lazy" decoding="async">
+        </div>
+        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-meat-boarshead-v2.webp" role="button" tabindex="0" aria-label="Open Boar's Head meat by the pound menu, full size">
+          <img src="assets/menu/menu-meat-boarshead-v2.webp" alt="Boar's Head meat by the pound menu" loading="lazy" decoding="async">
+        </div>
+        <div class="menu-card" data-menu-lightbox="1" data-img="assets/menu/menu-lottery.webp" role="button" tabindex="0" aria-label="Open New York Lottery menu, full size">
+          <img src="assets/menu/menu-lottery.webp" alt="Good 2 Go now has New York Lottery: Powerball, Mega Millions, Cash4Life, Take 5" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="menus-panel-done" data-close-menus>Exit Menus &amp; Back to Shopping</button>
+    </div>
+  </div>
+</div>
+
 <div class="menu-lightbox" id="menu-lightbox" role="dialog" aria-modal="true" aria-hidden="true">
   <button class="menu-lightbox-close" id="menu-lightbox-close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <img id="menu-lightbox-img" src="" alt="">
@@ -1218,7 +1300,7 @@
 </div>
 
 <script type="application/json" id="product-data">
-{"drinks-row":[{"id":"d1","brand":"Snapple","name":"Snapple Iced Tea Lineup","price":"$2.29","tag":"16oz","img":"assets/products/snapple-lineup-v2.webp"},{"id":"d2","brand":"Brisk","name":"Brisk Iced Tea","price":"$3.49","tag":"2L","img":"assets/products/brisk-lemon-peach-v2.webp"},{"id":"d3","brand":"Coca-Cola","name":"Coca-Cola Original","price":"$2.49","tag":"500mL","img":"assets/products/coca-cola-500ml-v2.webp"},{"id":"d4","brand":"Dr Pepper","name":"Dr Pepper Cherry","price":"$2.99","tag":"20oz","img":"assets/products/dr-pepper-cherry-v2.webp"},{"id":"d5","brand":"Mountain Dew","name":"Mountain Dew Citrus","price":"$2.49","tag":"16.9oz","img":"assets/products/mtn-dew-citrus.webp"},{"id":"d6","brand":"Pepsi","name":"Pepsi Cola","price":"$2.49","tag":"500mL","img":"assets/products/pepsi-500ml-v2.webp"},{"id":"d7","brand":"Red Bull","name":"Dirty Red Bull","price":"$5.99","tag":"Energy Drink + Flavor Shot","img":"assets/products/drinks-dirty-redbull.jpg"},{"id":"d8","brand":"Red Bull","name":"Red Bull Blue Edition, Blueberry 4-Pack","price":"$8.99","tag":"4x8.4oz","img":"assets/products/drinks-redbull-blue-edition-4pack.jpg"},{"id":"d9","brand":"Domestic","name":"Domestic 6-Pack","flavor":"Beer","price":"$9.49","badge":"6PK","badgeColor":"#8a5a0a","bg":"linear-gradient(150deg,#8a5a0a,#2e1c02)","tag":"Beer"},{"id":"d10","brand":"New Belgium","name":"Voodoo Ranger Imperial IPA","price":"$3.99","tag":"9% ABV, 16oz","img":"assets/products/drinks-voodoo-ranger-imperial-ipa.jpg"},{"id":"d11","brand":"Sparkling","name":"Sparkling Water, Assorted Brands","price":"$1.79","tag":"Water","img":"assets/products/drinks-sparkling-water-brand-lineup.jpg"},{"id":"d12","brand":"Monster","name":"Monster Energy Original","price":"$3.19","tag":"500mL","img":"assets/products/drinks-monster-energy-original.jpg"},{"id":"d13","brand":"High Noon","name":"High Noon Vodka Seltzer, Raspberry","price":"$11.99","tag":"4x355mL, 4.5% ABV","img":"assets/products/drinks-highnoon-vodka-seltzer-raspberry-4pack.jpg"},{"id":"d14","brand":"Water","name":"Bottled Water, Assorted Brands","price":"$1.29","tag":"Water","img":"assets/products/drinks-water-brand-lineup.jpg"},{"id":"d15","brand":"Gatorade","name":"Gatorade Thirst Quencher, Cool Blue","price":"$2.49","tag":"28oz","img":"assets/products/drinks-gatorade-cool-blue.jpg"}],"deli-row":[{"id":"dl1","brand":"Boar's Head","name":"Maple Glazed Honey Coat Turkey Breast","price":"$8.99","tag":"per lb","img":"assets/products/deli-maple-honey-turkey.webp"},{"id":"dl2","brand":"Deli Counter","name":"Peppercorn Roast Beef","price":"$10.99","tag":"per lb","img":"assets/products/deli-roast-beef.webp"},{"id":"dl3","brand":"Deli Counter","name":"Provolone Cheese","price":"$7.99","tag":"per lb","img":"assets/products/deli-provolone.webp"},{"id":"dl4","brand":"Deli Counter","name":"Blazing Buffalo Chicken","price":"$8.49","tag":"per lb","img":"assets/products/deli-buffalo-chicken.webp"},{"id":"dl5","brand":"Carolina Deluxe","name":"Browned Turkey Breast","price":"$7.99","tag":"per lb","img":"assets/products/deli-carolina-turkey.webp"},{"id":"dl6","brand":"NY Deli","name":"Pastrami Top Round","price":"$10.99","tag":"per lb","img":"assets/products/deli-pastrami.webp"},{"id":"dl7","brand":"Deli Counter","name":"American Cheese","price":"$6.99","tag":"per lb","img":"assets/products/deli-american-cheese.webp"}],"extras-row":[{"id":"e1","brand":"ZYN","name":"ZYN Cool Mint","price":"$5.99","tag":"6MG","img":"assets/products/zyn-cool-mint.webp"},{"id":"e2","brand":"ZYN","name":"ZYN Wintergreen","price":"$5.99","tag":"6MG","img":"assets/products/zyn-wintergreen.webp"},{"id":"e3","brand":"ZYN","name":"ZYN Peppermint","price":"$5.99","tag":"6MG","img":"assets/products/zyn-peppermint.webp"},{"id":"e4","brand":"ZYN","name":"ZYN Cinnamon","price":"$5.99","tag":"6MG","img":"assets/products/zyn-cinnamon.webp"},{"id":"e5","brand":"ZYN","name":"ZYN Coffee","price":"$5.99","tag":"6MG","img":"assets/products/zyn-coffee.webp"},{"id":"e6","brand":"Rogue","name":"Rogue Original","price":"$5.49","tag":"6MG","img":"assets/products/rogue-original.webp"},{"id":"e7","brand":"Rogue","name":"Rogue Wintergreen","price":"$5.49","tag":"6MG","img":"assets/products/rogue-wintergreen.webp"},{"id":"e8","brand":"Rogue","name":"Rogue Peppermint","price":"$5.49","tag":"6MG","img":"assets/products/rogue-peppermint.webp"},{"id":"e9","brand":"Rogue","name":"Rogue Citrus","price":"$5.49","tag":"6MG","img":"assets/products/rogue-citrus.webp"},{"id":"e10","brand":"G-PULSE","name":"G-Pulse Spearmint","price":"$5.49","tag":"6MG","img":"assets/products/gpulse-spearmint.webp"},{"id":"e11","brand":"G-PULSE","name":"G-Pulse Citrus","price":"$5.49","tag":"10MG","img":"assets/products/gpulse-citrus.webp"},{"id":"e12","brand":"BEAR","name":"Bear Disposable","flavor":"Assorted Colors","price":"$14.99","badge":"BEAR","badgeColor":"#c9126e","bg":"linear-gradient(150deg,#c9126e,#3a0620)","tag":"Disposable"},{"id":"e13","brand":"NAZ","name":"NAZ Pouches","flavor":"Mixed Flavors","price":"$5.49","badge":"NAZ","badgeColor":"#22222a","bg":"linear-gradient(150deg,#3a3a44,#101014)","tag":"Nicotine Pouch"}],"utz-row":[{"id":"u1","brand":"Utz","name":"White Cheddar Popcorn","price":"$4.99","tag":"6.5oz","img":"assets/products/utz-white-cheddar-popcorn-v2.webp"},{"id":"u2","brand":"Utz","name":"Wavy French Onion","price":"$4.99","tag":"2.75oz","img":"assets/products/utz-french-onion-chips-v2.webp"},{"id":"u3","brand":"Utz","name":"Butter Popcorn","price":"$4.99","tag":"2.5oz","img":"assets/products/utz-butter-popcorn-sm-v2.webp"},{"id":"u4","brand":"Utz","name":"Red Hot Chips","price":"$4.99","tag":"2.75oz","img":"assets/products/utz-red-hot-chips-v2.webp"},{"id":"u5","brand":"Utz","name":"Ripples Sour Cream & Onion","price":"$4.99","tag":"2.75oz","img":"assets/products/utz-sour-cream-onion-v2.webp"},{"id":"u6","brand":"Utz","name":"Salt 'n Vinegar","price":"$4.99","tag":"Party Size","img":"assets/products/utz-salt-vinegar-v2.webp"},{"id":"u7","brand":"Utz","name":"Honey Barbeque Chips","price":"$4.99","tag":"2.75oz","img":"assets/products/utz-honey-bbq.jpg"},{"id":"u8","brand":"Utz","name":"Butter Popcorn","price":"$4.99","tag":"6.5oz","img":"assets/products/utz-butter-popcorn-lg.jpg"},{"id":"u9","brand":"Utz","name":"Cheddar Cheese Curls","price":"$4.99","tag":"3.5oz","img":"assets/products/utz-cheese-curls-blue.jpg"},{"id":"u10","brand":"Utz","name":"Cheddar Cheese Curls","price":"$4.99","tag":"8.5oz","img":"assets/products/utz-cheese-curls-cheddar.jpg"}],"energy-row":[{"id":"en1","brand":"Red Bull","name":"Red Bull Original","price":"$3.29","tag":"8.4oz","img":"assets/products/energy-redbull-original.webp"},{"id":"en2","brand":"Red Bull","name":"Red Bull Sugar-Free","price":"$3.29","tag":"8.4oz","img":"assets/products/energy-redbull-sugarfree.webp"},{"id":"en3","brand":"Monster","name":"Monster Energy Original","price":"$3.19","tag":"16oz","img":"assets/products/energy-monster-original.webp"},{"id":"en4","brand":"Monster","name":"Monster Zero Ultra","price":"$3.19","tag":"16oz","img":"assets/products/energy-monster-zero-ultra.webp"},{"id":"en5","brand":"Bang","name":"Bang Silver Energy","price":"$3.49","tag":"16oz","img":"assets/products/energy-bang-silver.webp"},{"id":"en6","brand":"Celsius","name":"Celsius Live Fit, Sparkling Orange","price":"$3.49","tag":"12oz","img":"assets/products/energy-celsius-sparkling-orange.webp"},{"id":"en7","brand":"5-hour Energy","name":"5-hour Energy Original, Regular Strength","price":"$4.29","tag":"1.93oz Shot","img":"assets/products/energy-5hour-original.webp"},{"id":"en8","brand":"Rockstar","name":"Rockstar Energy Original","price":"$2.99","tag":"16oz","img":"assets/products/energy-rockstar-original.webp"},{"id":"en9","brand":"Bloom","name":"Bloom Sparkling Energy, Strawberry Watermelon","price":"$3.49","tag":"12oz","img":"assets/products/energy-bloom-strawberry-watermelon.webp"},{"id":"en10","brand":"C4","name":"C4 Original, Zero Sugar","price":"$3.29","tag":"16oz","img":"assets/products/energy-c4-zero-sugar.webp"},{"id":"en11","brand":"Ghost","name":"Ghost Energy Original","price":"$2.99","tag":"16oz","img":"assets/products/energy-ghost-original.webp"},{"id":"en12","brand":"Reign","name":"Reign Total Body Fuel, Wild Blue Raspberry","price":"$3.49","tag":"16oz","img":"assets/products/energy-reign-blue-raspberry.webp"},{"id":"en13","brand":"Alani Nu","name":"Alani Nu Pink Slush AI","price":"$3.29","tag":"12oz","img":"assets/products/energy-alani-pink-slush.jpg"}],"groceries-row":[{"id":"g1","name":"Whole Milk, Half Gallon","price":"$3.99","icon":"bag"},{"id":"g2","name":"Large Eggs, Dozen","price":"$4.49","icon":"bag"},{"id":"g3","name":"White Bread Loaf","price":"$3.49","icon":"bag"},{"id":"g4","name":"Bananas, Bunch","price":"$1.49","icon":"bag"},{"id":"g5","name":"Canned Soup","price":"$2.29","icon":"bag"},{"id":"g6","name":"Pasta & Sauce","price":"$3.99","icon":"bag"},{"id":"g7","name":"Paper Towels, 2-Pack","price":"$5.99","icon":"bag"},{"id":"g8","name":"Laundry Detergent","price":"$8.99","icon":"bag"}],"chips-row":[{"id":"c1","brand":"Lay's","name":"Lay's Classic","price":"$2.79","tag":"7.75oz","img":"assets/products/chips-lays-classic.webp"},{"id":"c2","brand":"Doritos","name":"Doritos Nacho Cheese, Party Size","price":"$2.99","tag":"15.5oz","img":"assets/products/chips-doritos-nacho-cheese.webp"},{"id":"c3","brand":"Cheetos","name":"Cheetos Crunchy","price":"$2.99","tag":"8oz","img":"assets/products/chips-cheetos-crunchy.webp"},{"id":"c4","brand":"Ruffles","name":"Ruffles Cheddar & Sour Cream","price":"$2.99","tag":"8oz","img":"assets/products/chips-ruffles-cheddar-sourcream.webp"},{"id":"c5","brand":"Fritos","name":"Fritos Original Corn Chips","price":"$2.79","tag":"9.25oz","img":"assets/products/chips-fritos-original.webp"},{"id":"c6","brand":"Pringles","name":"Pringles Original","price":"$2.49","tag":"165g Can","img":"assets/products/chips-pringles-original.webp"},{"id":"c7","brand":"Tostitos","name":"Tostitos Scoops! Original","price":"$3.99","tag":"14oz","img":"assets/products/chips-tostitos-scoops.webp"},{"id":"c8","brand":"Sun Chips","name":"Sun Chips Harvest Cheddar","price":"$2.99","tag":"100% Whole Grain","img":"assets/products/chips-sunchips-harvest-cheddar.webp"}],"candy-row":[{"id":"cd1","brand":"Haribo","name":"Goldbears Gummi Candy","price":"$2.99","tag":"8oz Bag","img":"assets/products/haribo-goldbears.jpg"},{"id":"cd2","brand":"Swedish Fish","name":"Swedish Fish Mini","price":"$3.99","tag":"Share Size","img":"assets/products/swedish-fish-mini.jpg"},{"id":"cd3","brand":"Trolli","name":"Sour Brite Octopus","price":"$2.49","tag":"4.25oz","img":"assets/products/trolli-sour-brite-octopus.jpg"},{"id":"cd4","brand":"Haribo","name":"Twin Snakes","price":"$3.49","tag":"8oz Bag","img":"assets/products/haribo-twin-snakes.jpg"},{"id":"cd5","brand":"Sour Jacks","name":"Original Sour Wedges","price":"$2.49","tag":"5oz","img":"assets/products/sour-jacks-wedges.jpg"},{"id":"cd6","brand":"Sour Punch","name":"Sour Punch Bites","price":"$2.99","tag":"Assorted","img":"assets/products/sour-punch-bites.jpg"},{"id":"cd7","brand":"Lifesavers","name":"Lifesavers Gummies","price":"$2.29","tag":"7oz","img":"assets/products/lifesavers-gummies.jpg"},{"id":"cd8","brand":"Sour Patch Kids","name":"Sour Patch Kids","price":"$2.99","tag":"Original","img":"assets/products/sour-patch-kids.jpg"},{"id":"cd9","brand":"Skittles","name":"Skittles Gummies Wild Berry","price":"$2.99","tag":"5.8oz","img":"assets/products/skittles-gummies.jpg"},{"id":"cd10","brand":"Trolli","name":"Sour Brite Crawlers","price":"$8.99","tag":"28.8oz Value Size","img":"assets/products/trolli-sour-brite-crawlers.jpg"},{"id":"cd11","brand":"Lico Bites","name":"Hello Kitty Strawberry Milk Candy Bites","price":"$2.99","tag":"50g","img":"assets/products/candy-lico-hellokitty-strawberry.webp"},{"id":"cd12","brand":"Lico Bites","name":"Spicy Chili Gummy, Hot & Tangy","price":"$3.49","tag":"3oz","img":"assets/products/candy-lico-spicy-chili.webp"},{"id":"cd13","brand":"Life Savers","name":"Gummies Fruit Rings","price":"$3.99","tag":"7oz","img":"assets/products/candy-lifesavers-fruit-rings.webp"},{"id":"cd14","brand":"Peelerz","name":"Assorted Fruit Peelable Gummy","price":"$4.49","tag":"350g","img":"assets/products/candy-peelerz-assorted-fruit.webp"},{"id":"cd15","brand":"Jolly Rancher","name":"Gummies Sours, 2 Flavours in 1","price":"$3.99","tag":"182g","img":"assets/products/candy-jollyrancher-sours.webp"},{"id":"cd16","brand":"Arizona","name":"Green Tea Fruit Snacks","price":"$2.49","tag":"5oz","img":"assets/products/candy-arizona-green-tea-snacks.webp"},{"id":"cd17","brand":"efrutti","name":"Sweet & Sour Apple Trio","price":"$2.99","tag":"3.5oz","img":"assets/products/candy-efrutti-apple-trio.webp"},{"id":"cd18","brand":"Yumy Yumy","name":"Wonder Worms Gummy Candy","price":"$2.99","tag":"4oz","img":"assets/products/candy-yumyyumy-wonder-worms.webp"},{"id":"cd19","brand":"Werther's Original","name":"Soft Caramels","price":"$3.99","tag":"125g","img":"assets/products/candy-werthers-soft-caramels.webp"},{"id":"cd20","brand":"Riesen","name":"Chewy Chocolate Caramel","price":"$4.49","tag":"45% Cacao","img":"assets/products/candy-riesen-chocolate-caramel.webp"}]}
+{"drinks-row":[{"id":"d1","brand":"Snapple","name":"Snapple Iced Tea Lineup","price":"$2.99","tag":"16oz","img":"assets/products/snapple-lineup-v2.webp"},{"id":"d2","brand":"Brisk","name":"Brisk Iced Tea","price":"$2.99","tag":"2L","img":"assets/products/brisk-lemon-peach-v2.webp"},{"id":"d3","brand":"Coca-Cola","name":"Coca-Cola Original","price":"$2.79","tag":"20oz","img":"assets/products/coca-cola-500ml-v2.webp"},{"id":"d4","brand":"Dr Pepper","name":"Dr Pepper Cherry","price":"$2.79","tag":"20oz","img":"assets/products/dr-pepper-cherry-v2.webp"},{"id":"d5","brand":"Mountain Dew","name":"Mountain Dew Citrus","price":"$2.79","tag":"20oz","img":"assets/products/mtn-dew-citrus.webp"},{"id":"d6","brand":"Pepsi","name":"Pepsi Cola","price":"$2.79","tag":"20oz","img":"assets/products/pepsi-500ml-v2.webp"},{"id":"d7","brand":"Red Bull","name":"Dirty Red Bull","price":"$5.99","tag":"Energy Drink + Flavor Shot","img":"assets/products/drinks-dirty-redbull.jpg"},{"id":"d8","brand":"Red Bull","name":"Red Bull Blue Edition, Blueberry 4-Pack","price":"$8.99","tag":"4x8.4oz","img":"assets/products/drinks-redbull-blue-edition-4pack.jpg"},{"id":"d9","brand":"Domestic","name":"Domestic 6-Pack","flavor":"Beer","price":"$9.49","badge":"6PK","badgeColor":"#8a5a0a","bg":"linear-gradient(150deg,#8a5a0a,#2e1c02)","tag":"Beer"},{"id":"d12","brand":"Monster","name":"Monster Energy Original","price":"$3.50","tag":"500mL","img":"assets/products/drinks-monster-energy-original.jpg"},{"id":"d13","brand":"High Noon","name":"High Noon Vodka Seltzer, Raspberry","price":"$11.99","tag":"4x355mL, 4.5% ABV","img":"assets/products/drinks-highnoon-vodka-seltzer-raspberry-4pack.jpg"},{"id":"d14","brand":"Water","name":"Bottled Water, Assorted Brands","price":"$1.29","tag":"Water","img":"assets/products/drinks-water-brand-lineup.jpg"},{"id":"d15","brand":"Gatorade","name":"Gatorade Thirst Quencher, Cool Blue","price":"$3.99","tag":"28oz","img":"assets/products/drinks-gatorade-cool-blue.jpg"}],"deli-row":[{"id":"dl1","brand":"Boar's Head","name":"Maple Glazed Honey Coat Turkey Breast","price":"","tag":"per lb","img":"assets/products/deli-maple-honey-turkey.webp"},{"id":"dl2","brand":"Deli Counter","name":"Peppercorn Roast Beef","price":"","tag":"per lb","img":"assets/products/deli-roast-beef.webp"},{"id":"dl3","brand":"Deli Counter","name":"Provolone Cheese","price":"","tag":"per lb","img":"assets/products/deli-provolone.webp"},{"id":"dl4","brand":"Deli Counter","name":"Blazing Buffalo Chicken","price":"","tag":"per lb","img":"assets/products/deli-buffalo-chicken.webp"},{"id":"dl5","brand":"Carolina Deluxe","name":"Browned Turkey Breast","price":"","tag":"per lb","img":"assets/products/deli-carolina-turkey.webp"},{"id":"dl6","brand":"NY Deli","name":"Pastrami Top Round","price":"","tag":"per lb","img":"assets/products/deli-pastrami.webp"},{"id":"dl7","brand":"Deli Counter","name":"American Cheese","price":"","tag":"per lb","img":"assets/products/deli-american-cheese.webp"}],"extras-row":[{"id":"e1","brand":"ZYN","name":"ZYN Cool Mint","price":"$5.99","tag":"6MG","img":"assets/products/zyn-cool-mint.webp"},{"id":"e2","brand":"ZYN","name":"ZYN Wintergreen","price":"$5.99","tag":"6MG","img":"assets/products/zyn-wintergreen.webp"},{"id":"e3","brand":"ZYN","name":"ZYN Peppermint","price":"$5.99","tag":"6MG","img":"assets/products/zyn-peppermint.webp"},{"id":"e4","brand":"ZYN","name":"ZYN Cinnamon","price":"$5.99","tag":"6MG","img":"assets/products/zyn-cinnamon.webp"},{"id":"e5","brand":"ZYN","name":"ZYN Coffee","price":"$5.99","tag":"6MG","img":"assets/products/zyn-coffee.webp"},{"id":"e6","brand":"Rogue","name":"Rogue Original","price":"$5.49","tag":"6MG","img":"assets/products/rogue-original.webp"},{"id":"e7","brand":"Rogue","name":"Rogue Wintergreen","price":"$5.49","tag":"6MG","img":"assets/products/rogue-wintergreen.webp"},{"id":"e8","brand":"Rogue","name":"Rogue Peppermint","price":"$5.49","tag":"6MG","img":"assets/products/rogue-peppermint.webp"},{"id":"e9","brand":"Rogue","name":"Rogue Citrus","price":"$5.49","tag":"6MG","img":"assets/products/rogue-citrus.webp"},{"id":"e10","brand":"G-PULSE","name":"G-Pulse Spearmint","price":"$5.49","tag":"6MG","img":"assets/products/gpulse-spearmint.webp"},{"id":"e11","brand":"G-PULSE","name":"G-Pulse Citrus","price":"$5.49","tag":"10MG","img":"assets/products/gpulse-citrus.webp"},{"id":"e12","brand":"BEAR","name":"Bear Disposable","flavor":"Assorted Colors","price":"$14.99","badge":"BEAR","badgeColor":"#c9126e","bg":"linear-gradient(150deg,#c9126e,#3a0620)","tag":"Disposable"},{"id":"e13","brand":"NAZ","name":"NAZ Pouches","flavor":"Mixed Flavors","price":"$5.49","badge":"NAZ","badgeColor":"#22222a","bg":"linear-gradient(150deg,#3a3a44,#101014)","tag":"Nicotine Pouch"}],"utz-row":[{"id":"u1","brand":"Utz","name":"White Cheddar Popcorn","price":"$2.49","tag":"6.5oz","img":"assets/products/utz-white-cheddar-popcorn-v2.webp"},{"id":"u2","brand":"Utz","name":"Wavy French Onion","price":"$2.49","tag":"2.75oz","img":"assets/products/utz-french-onion-chips-v2.webp"},{"id":"u3","brand":"Utz","name":"Butter Popcorn","price":"$2.49","tag":"2.5oz","img":"assets/products/utz-butter-popcorn-sm-v2.webp"},{"id":"u4","brand":"Utz","name":"Red Hot Chips","price":"$2.49","tag":"2.75oz","img":"assets/products/utz-red-hot-chips-v2.webp"},{"id":"u5","brand":"Utz","name":"Ripples Sour Cream & Onion","price":"$2.49","tag":"2.75oz","img":"assets/products/utz-sour-cream-onion-v2.webp"},{"id":"u6","brand":"Utz","name":"Salt 'n Vinegar","price":"$2.49","tag":"Party Size","img":"assets/products/utz-salt-vinegar-v2.webp"},{"id":"u7","brand":"Utz","name":"Honey Barbeque Chips","price":"$2.49","tag":"2.75oz","img":"assets/products/utz-honey-bbq.jpg"},{"id":"u8","brand":"Utz","name":"Butter Popcorn","price":"$2.49","tag":"6.5oz","img":"assets/products/utz-butter-popcorn-lg.jpg"},{"id":"u9","brand":"Utz","name":"Cheddar Cheese Curls","price":"$2.49","tag":"3.5oz","img":"assets/products/utz-cheese-curls-blue.jpg"},{"id":"u10","brand":"Utz","name":"Cheddar Cheese Curls","price":"$2.49","tag":"8.5oz","img":"assets/products/utz-cheese-curls-cheddar.jpg"}],"energy-row":[{"id":"en1","brand":"Red Bull","name":"Red Bull Original","price":"$3.50","tag":"12oz","img":"assets/products/energy-redbull-original.webp"},{"id":"en2","brand":"Red Bull","name":"Red Bull Sugar-Free","price":"$3.50","tag":"12oz","img":"assets/products/energy-redbull-sugarfree.webp"},{"id":"en3","brand":"Monster","name":"Monster Energy Original","price":"$3.50","tag":"16oz","img":"assets/products/energy-monster-original.webp"},{"id":"en4","brand":"Monster","name":"Monster Zero Ultra","price":"$3.50","tag":"16oz","img":"assets/products/energy-monster-zero-ultra.webp"},{"id":"en5","brand":"Bang","name":"Bang Silver Energy","price":"$3.50","tag":"16oz","img":"assets/products/energy-bang-silver.webp"},{"id":"en6","brand":"Celsius","name":"Celsius Live Fit, Sparkling Orange","price":"$3.50","tag":"12oz","img":"assets/products/energy-celsius-sparkling-orange.webp"},{"id":"en7","brand":"5-hour Energy","name":"5-hour Energy Original, Regular Strength","price":"$3.99","tag":"1.93oz Shot","img":"assets/products/energy-5hour-original.webp"},{"id":"en8","brand":"Rockstar","name":"Rockstar Energy Original","price":"$3.79","tag":"16oz","img":"assets/products/energy-rockstar-original.webp"},{"id":"en9","brand":"Bloom","name":"Bloom Sparkling Energy, Strawberry Watermelon","price":"$3.49","tag":"12oz","img":"assets/products/energy-bloom-strawberry-watermelon.webp"},{"id":"en10","brand":"C4","name":"C4 Original, Zero Sugar","price":"$3.50","tag":"16oz","img":"assets/products/energy-c4-zero-sugar.webp"},{"id":"en11","brand":"Ghost","name":"Ghost Energy Original","price":"$3.50","tag":"16oz","img":"assets/products/energy-ghost-original.webp"},{"id":"en12","brand":"Reign","name":"Reign Total Body Fuel, Wild Blue Raspberry","price":"$3.50","tag":"16oz","img":"assets/products/energy-reign-blue-raspberry.webp"},{"id":"en13","brand":"Alani Nu","name":"Alani Nu Pink Slush AI","price":"$2.99","tag":"12oz","img":"assets/products/energy-alani-pink-slush.jpg"}],"groceries-row":[{"id":"g3","name":"White Bread Loaf","price":"$3.49","icon":"bag"},{"id":"g5","name":"Canned Soup","price":"$2.29","icon":"bag"},{"id":"g7","name":"Paper Towels","price":"$1.99","brand":"Right Choice","tag":"1 Roll","img":"assets/products/grocery-right-choice-paper-towels.webp"},{"id":"g8","name":"Xtra Laundry Detergent","price":"$4.99","brand":"Xtra","tag":"56 fl oz","img":"assets/products/grocery-xtra-detergent.webp"},{"id":"g9","name":"Toilet Tissue","price":"$1.29","brand":"Scott","tag":"1000 Sheets","img":"assets/products/grocery-scott-toilet-tissue.webp"},{"id":"g10","name":"Gallon of Water","price":"$3.50","brand":"Poland Spring","tag":"1 Gallon","img":"assets/products/grocery-poland-spring-gallon.webp"},{"id":"g11","brand":"Breyers","name":"Breyers Butter Pecan Ice Cream","price":"$8.99","tag":"1.5 qt","img":"assets/products/grocery-breyers-butter-pecan.webp"},{"id":"g12","brand":"CAM2","name":"CAM2 Magnum Motor Oil, 10W-40","price":"$3.99","tag":"1 Quart","img":"assets/products/grocery-cam2-motor-oil.webp"},{"id":"g13","brand":"Purina","name":"Friskies Cat Food","price":"$1.49","tag":"Per Can","img":"assets/products/grocery-friskies-milkbone.webp"}],"chips-row":[{"id":"c1","brand":"Lay's","name":"Lay's Classic","price":"$2.79","tag":"7.75oz","img":"assets/products/chips-lays-classic.webp"},{"id":"c2","brand":"Doritos","name":"Doritos Nacho Cheese, Party Size","price":"$2.79","tag":"15.5oz","img":"assets/products/chips-doritos-nacho-cheese.webp"},{"id":"c3","brand":"Cheetos","name":"Cheetos Crunchy","price":"$2.79","tag":"8oz","img":"assets/products/chips-cheetos-crunchy.webp"},{"id":"c4","brand":"Ruffles","name":"Ruffles Cheddar & Sour Cream","price":"$2.79","tag":"8oz","img":"assets/products/chips-ruffles-cheddar-sourcream.webp"},{"id":"c5","brand":"Fritos","name":"Fritos Original Corn Chips","price":"$2.79","tag":"9.25oz","img":"assets/products/chips-fritos-original.webp"},{"id":"c6","brand":"Pringles","name":"Pringles Original","price":"$3.99","tag":"165g Can","img":"assets/products/chips-pringles-original.webp"},{"id":"c7","brand":"Tostitos","name":"Tostitos Scoops! Original","price":"$2.79","tag":"14oz","img":"assets/products/chips-tostitos-scoops.webp"},{"id":"c8","brand":"Sun Chips","name":"Sun Chips Harvest Cheddar","price":"$2.79","tag":"100% Whole Grain","img":"assets/products/chips-sunchips-harvest-cheddar.webp"},{"id":"c9","brand":"Pepperidge Farm","name":"Goldfish Cheddar Crackers","price":"$3.25","tag":"11oz","img":"assets/products/chips-goldfish-cheddar.webp"}],"candy-row":[{"id":"cd1","brand":"Haribo","name":"Goldbears Gummi Candy","price":"$3.99","tag":"8oz Bag","img":"assets/products/haribo-goldbears.jpg"},{"id":"cd2","brand":"Swedish Fish","name":"Swedish Fish Mini","price":"$3.99","tag":"Share Size","img":"assets/products/swedish-fish-mini.jpg"},{"id":"cd3","brand":"Trolli","name":"Sour Brite Octopus","price":"$3.99","tag":"4.25oz","img":"assets/products/trolli-sour-brite-octopus.jpg"},{"id":"cd4","brand":"Haribo","name":"Twin Snakes","price":"$3.99","tag":"8oz Bag","img":"assets/products/haribo-twin-snakes.jpg"},{"id":"cd5","brand":"Sour Jacks","name":"Original Sour Wedges","price":"$3.99","tag":"5oz","img":"assets/products/sour-jacks-wedges.jpg"},{"id":"cd6","brand":"Sour Punch","name":"Sour Punch Bites","price":"$3.99","tag":"Assorted","img":"assets/products/sour-punch-bites.jpg"},{"id":"cd7","brand":"Lifesavers","name":"Lifesavers Gummies","price":"$3.99","tag":"7oz","img":"assets/products/lifesavers-gummies.jpg"},{"id":"cd8","brand":"Sour Patch Kids","name":"Sour Patch Kids","price":"$3.99","tag":"Original","img":"assets/products/sour-patch-kids.jpg"},{"id":"cd9","brand":"Skittles","name":"Skittles Gummies Wild Berry","price":"$3.99","tag":"5.8oz","img":"assets/products/skittles-gummies.jpg"},{"id":"cd10","brand":"Trolli","name":"Sour Brite Crawlers","price":"$3.99","tag":"28.8oz Value Size","img":"assets/products/trolli-sour-brite-crawlers.jpg"},{"id":"cd11","brand":"Lico Bites","name":"Hello Kitty Strawberry Milk Candy Bites","price":"$2.99","tag":"50g","img":"assets/products/candy-lico-hellokitty-strawberry.webp"},{"id":"cd12","brand":"Lico Bites","name":"Spicy Chili Gummy, Hot & Tangy","price":"$3.99","tag":"3oz","img":"assets/products/candy-lico-spicy-chili.webp"},{"id":"cd13","brand":"Life Savers","name":"Gummies Fruit Rings","price":"$3.99","tag":"7oz","img":"assets/products/candy-lifesavers-fruit-rings.webp"},{"id":"cd14","brand":"Peelerz","name":"Assorted Fruit Peelable Gummy","price":"$3.99","tag":"350g","img":"assets/products/candy-peelerz-assorted-fruit.webp"},{"id":"cd15","brand":"Jolly Rancher","name":"Gummies Sours, 2 Flavours in 1","price":"$3.99","tag":"182g","img":"assets/products/candy-jollyrancher-sours.webp"},{"id":"cd16","brand":"Arizona","name":"Green Tea Fruit Snacks","price":"$3.99","tag":"5oz","img":"assets/products/candy-arizona-green-tea-snacks.webp"},{"id":"cd17","brand":"efrutti","name":"Sweet & Sour Apple Trio","price":"$3.99","tag":"3.5oz","img":"assets/products/candy-efrutti-apple-trio.webp"},{"id":"cd18","brand":"Yumy Yumy","name":"Wonder Worms Gummy Candy","price":"$3.99","tag":"4oz","img":"assets/products/candy-yumyyumy-wonder-worms.webp"},{"id":"cd19","brand":"Werther's Original","name":"Soft Caramels","price":"$3.99","tag":"125g","img":"assets/products/candy-werthers-soft-caramels.webp"},{"id":"cd20","brand":"Riesen","name":"Chewy Chocolate Caramel","price":"$4.49","tag":"45% Cacao","img":"assets/products/candy-riesen-chocolate-caramel.webp"}]}
 </script>
 
 <script>
@@ -1276,7 +1358,7 @@
         '</div>';
       }
       html += '<div class="car-card">' + thumb +
-        '<div class="car-body"><div class="name">' + it.name + '</div><div class="price">' + it.price + (it.tag && it.tag.includes('lb') ? '/lb' : '') + '</div></div>' +
+        '<div class="car-body"><div class="name">' + it.name + '</div>' + (it.price ? '<div class="price">' + it.price + (it.tag && it.tag.includes('lb') ? '/lb' : '') + '</div>' : '') + '</div>' +
       '</div>';
     });
     row.innerHTML = html;
@@ -1333,7 +1415,7 @@
     lbName.textContent = el.getAttribute('data-name');
     var price = el.getAttribute('data-price');
     var tag = el.getAttribute('data-tag');
-    lbPrice.textContent = price + (tag && tag.includes('lb') ? '/lb' : '');
+    lbPrice.textContent = price ? price + (tag && tag.includes('lb') ? '/lb' : '') : '';
     lbTag.textContent = tag && !tag.includes('lb') ? tag : '';
     lb.classList.add('open');
     lb.setAttribute('aria-hidden', 'false');
@@ -1377,6 +1459,36 @@
   document.getElementById('menu-lightbox-close').addEventListener('click', closeMenuLightbox);
   mlb.addEventListener('click', function(e){ if(e.target === mlb){ closeMenuLightbox(); } });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeMenuLightbox(); } });
+
+
+  // ===================== MENUS PANEL (button at top opens all menus) =====================
+  var mp = document.getElementById('menus-panel');
+  var mpBody = document.getElementById('menus-panel-body');
+  var mpLastFocus = null;
+  function openMenus(){
+    mpLastFocus = document.activeElement;
+    mpBody.scrollTop = 0;
+    mp.classList.add('open');
+    mp.setAttribute('aria-hidden','false');
+    document.body.classList.add('menus-open');
+    document.getElementById('menus-panel-close').focus();
+  }
+  function closeMenus(){
+    if(!mp.classList.contains('open')) return;
+    mp.classList.remove('open');
+    mp.setAttribute('aria-hidden','true');
+    document.body.classList.remove('menus-open');
+    if(mpLastFocus && mpLastFocus.focus) mpLastFocus.focus();
+  }
+  document.addEventListener('click', function(e){
+    if(e.target.closest('[data-open-menus]')){ e.preventDefault(); openMenus(); }
+    else if(e.target.closest('[data-close-menus]')){ closeMenus(); }
+  });
+  document.getElementById('menus-panel-close').addEventListener('click', closeMenus);
+  // Escape closes the zoomed menu first, then the panel (capture phase runs before the zoom's own handler)
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && mp.classList.contains('open') && !mlb.classList.contains('open')){ closeMenus(); }
+  }, true);
 
   // ===================== DEAL OF THE DAY (live from Cloudflare) =====================
   // Paste your Worker address between the quotes, e.g.
